@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="shortcut icon" type="image/x-icon" href="a.png" />
+    <title>Home</title>
+    <style>
+        body {
+            background-color: #28608d;
+            font-family: Arial, sans-serif;
+        }
+    
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+    
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+            margin: 20px 0;
+        }
+    
+        button {
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+    
+        #me {
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+        }
+    
+        #her {
+            font-size: 20px;
+            font-weight: bold;
+            color: #007BFF;
+        }
+    </style>
+    
+</head>
+<body>
+    <div class="container" style="margin-top: 50px;">
+        <a href="index.html" style="text-decoration: none; border-radius: 10px; border: 2px solid #F0F8FF; padding: 10px; background-color: #b91f525d; color: #ccd3da;">家へ行きます</a>
+    </div>
+    <div class="container" style="margin-top: 50px;">
+        
+        <button onclick="stopListening()">Deactive</button>
+        <button onclick="startListening()">Start</button>
+        <button onclick="nextQuestion()">Next</button>
+        <button onclick="previousQuestion()">Previous</button>
+        <button onclick="checkAnswer()">Check Answer</button>
+    </div>
+    
+    <div class="container" style="padding-top: 50px;">
+        <label id="her" style="color:#804412; font-size: 20px;"></label>
+        <div id="me" style="color: #124580; margin-top: 10px;"></div>
+    </div>
+
+    <script>
+        // Define variables for speech recognition and synthesis
+        window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition || window.mozSpeechRecognition || window.msSpeechRecognition;
+        window.speechSynthesis = window.speechSynthesis || window.SpeechSynthesisUtterance;
+
+        // Define the speech recognition function
+        const recognition = new window.SpeechRecognition();
+        recognition.interimResults = true;
+        recognition.lang = 'ja-JP';
+
+        // Move the interviewData array to the global scope
+        var interviewData = [
+            { q: "初めまして", a: "初めまして" },
+            { q: "こんにちは", a: "こんにちは" },
+            { q: "あなたの名前は何ですか", a: "私はアジアンです" },
+            { q: "お国はどちらですか", a: "スリランカです" },
+            { q: "おいくつですか", a: "26歳です" },
+            { q: "今結婚してますか", a: "独身です" },
+            { q: "家族は何人ですか", a: "5人です" },
+            { q: "誰と誰ですか", a: "母と父と姉は二人と私は です" },
+            { q: "あなたのお父さんは何をしていますか？", a: "父は運転手でもう退職しています" },
+            { q: "あなたのお母さんは何をしていますか", a: "母は主婦です" },
+            { q: "お姉さんは何をしていますか", a: "姉は看護師です" },
+            { q: "あなたのもう一人のお姉さんは何をしているのですか", a: "彼女は主婦です" },
+            { q: "あなたはどこが働いてますか", a: "今 レストランで働いています" },
+            { q: "経験 何年間ですか", a: "経験に1年です" },
+            { q: "趣味は何ですか", a: "趣味は映画を見ることです" },
+            { q: "ありがとう", a: "ありがとう" },
+            { q: "さよなら", a: "さよなら" }
+            ];
+
+        var currentQuestionIndex = 0;
+        var isListening = false;
+
+       
+        // Function to start listening
+        function startListening() {
+            isListening = true;
+            askQuestion();
+        }
+
+        // Function to stop listening
+        function stopListening() {
+            isListening = false;
+            recognition.stop();
+        }
+
+        // Function to ask a question and initiate speech recognition
+        function askQuestion() {
+            if (currentQuestionIndex < interviewData.length && isListening) {
+                const question = interviewData[currentQuestionIndex].q;
+                const utterance = speakGirl(question);
+                document.getElementById("her").textContent = question;
+                utterance.onend = () => {
+                    setTimeout(()=>{recognition.start();},2000); // Start speech recognition after speaking the question
+                };
+            }
+        }
+
+        // Function to go to the next question
+        function nextQuestion() {
+            isListening=false;
+            recognition.stop();
+            
+            currentQuestionIndex++;
+            startListening();
+            document.getElementById('me').textContent ="";
+        }
+
+        // Function to go to the previous question
+        function previousQuestion() {
+            isListening=false;
+            recognition.stop();
+            
+            currentQuestionIndex--;
+            if (currentQuestionIndex < 0) {
+                currentQuestionIndex = 0;
+            }
+            startListening();
+            document.getElementById('me').textContent ="";
+        }
+
+        // Function to handle user response
+        function handleResponse(userResponse) {
+            const expectedAnswer = interviewData[currentQuestionIndex].a;
+            if (userResponse === expectedAnswer) {
+                document.getElementById('me').textContent = userResponse;
+                //document.getElementById('her').textContent = "はい";
+            } else {
+                //document.getElementById('her').textContent = "いいえ";
+            }
+        }
+
+        // Function to check the answer
+        function checkAnswer() {
+                isListening=false;
+                recognition.stop();
+            
+            const userResponse = document.getElementById('me').textContent;
+            const expectedAnswer = interviewData[currentQuestionIndex].a;
+            //handleResponse(userResponse);
+            if(userResponse===expectedAnswer){
+                speakGirl("はい");
+            }else{
+                speakGirl("いいえ");
+            }
+        }
+
+        // Function to speak the text
+        function speakGirl(transcript) {
+            const utterance = new SpeechSynthesisUtterance(transcript);
+            utterance.lang = 'ja-JP';
+            utterance.pitch = 1;
+            utterance.voice = speechSynthesis.getVoices().find(voice => voice.lang === 'ja-JP');
+            speechSynthesis.speak(utterance);
+
+            return utterance; // Return the utterance for further event handling
+        }
+
+        // Add event listener for speech recognition results
+        recognition.addEventListener('result', e => {
+            let transcript = Array.from(e.results)
+                .map(result => result[0].transcript)
+                .join('');
+            document.getElementById('me').textContent = transcript;
+            if (e.results[0].isFinal) {
+                handleResponse(transcript.trim());
+            }
+        });
+
+        // Add event listener for speech recognition end
+        recognition.addEventListener('end', () => {
+            if (isListening) {
+                recognition.start();
+            }
+        });
+    </script>
+</body>
+</html>
