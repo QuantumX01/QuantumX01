@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Group 1</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f4f4f4;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+    }
+
+    h1 {
+      color: #333;
+      background-color: rgb(7, 197, 49);
+      padding: 20px;
+      margin-top: 0;
+    }
+
+    .flashcard-container {
+      margin: 20px;
+      padding: 20px;
+      background-color: #fff;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+    }
+
+    .flashcard-label {
+      font-size: 1.5em;
+      color: #555;
+    }
+
+    .flashcard-word {
+      font-size: 3em;
+      color: #333;
+      margin: 10px 0;
+    }
+
+    .button-container {
+      margin-top: 20px;
+    }
+
+    button {
+      font-size: 1.2em;
+      padding: 10px 20px;
+      margin: 0 5px;
+      cursor: pointer;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 4px;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    #japanese-word {
+      font-size: 60px;
+      color: rgb(255, 145, 0);
+    }
+
+    #sinhala-word {
+      font-size: 60px;
+      color: #8645a0;
+    }
+
+    table {
+      border-radius: 8px;
+      border: 1px solid #ddd;
+      margin: 20px auto;
+      /* Center the table */
+    }
+
+    table td {
+      padding: 10px;
+      text-align: center;
+    }
+
+    table tr:first-child {
+      font-weight: bold;
+    }
+
+    #home-link {
+      border-radius: 10px;
+      border: 2px solid #F0F8FF;
+      padding: 10px;
+      background-color: #b91f525d;
+      color: #ccd3da;
+      text-decoration: none; /* Remove underline from links */
+      position: absolute;
+      top: 10px;
+      left: 10px;
+    }
+  </style>
+</head>
+
+<body>
+  <a href="allV.html" id="home-link">Back 戻る</a>
+  <h1>どうし</h1>
+
+  <div class="flashcard-container">
+    <div>
+      <span id="japanese-word" class="flashcard-word"></span><br>
+      <span id="sinhala-word" class="flashcard-word"></span>
+    </div>
+
+    <div class="button-container">
+      <button id="playBtn" onclick="play()">Play</button>
+      <button id="pauseBtn" onclick="pause()">Pause</button>
+      <button id="resumeBtn" onclick="resume()">Resume</button>
+      <button id="previousBtn" onclick="previous()">Previous</button>
+      <button id="nextBtn" onclick="next()">Next</button>
+    </div>
+  </div>
+
+<div style="display: flex;">
+  <table style="background-color: rgb(132, 0, 255);">
+    <caption style="color: rgb(132, 0, 255);">DF =>ない</caption>
+    <tr>
+      <td>う</td><td>わ</td>
+    </tr>
+    <tr>
+      <td>く</td><td>か</td>
+    </tr>
+    <tr>
+      <td>す</td><td>さ</td>
+    </tr>
+    <tr>
+      <td>つ</td><td>た</td>
+    </tr>
+    <tr>
+      <td>ぬ</td><td>な</td>
+    </tr>
+    <tr>
+      <td>む</td><td>ま</td>
+    </tr>
+    <tr>
+      <td>る</td><td>ら</td>
+    </tr>
+    <tr>
+      <td>ぐ</td><td>が</td>
+    </tr>
+    <tr>
+      <td>ぶ</td><td>ば</td>
+    </tr>
+  </table>
+  <table style="background-color: rgb(27, 108, 110);">
+    <caption style="color: rgb(27, 108, 110);;">DF =>ます</caption>
+    <tr>
+      <td>う</td><td>い</td>
+    </tr>
+    <tr>
+      <td>く</td><td>き</td>
+    </tr>
+    <tr>
+      <td>す</td><td>し</td>
+    </tr>
+    <tr>
+      <td>つ</td><td>ち</td>
+    </tr>
+    <tr>
+      <td>ぬ</td><td>に</td>
+    </tr>
+    <tr>
+      <td>む</td><td>み</td>
+    </tr>
+    <tr>
+      <td>る</td><td>り</td>
+    </tr>
+    <tr>
+      <td>ぐ</td><td>ぎ</td>
+    </tr>
+    <tr>
+      <td>ぶ</td><td>び</td>
+    </tr>
+  </table>
+  <table style="background-color: rgb(122, 24, 81);">
+    <caption style="color: rgb(122, 24, 81);">DF => た => て</caption>
+    <tr>
+      <td>く</td><td>いた</td><td>いて</td>
+    </tr>
+    <tr>
+      <td>ぐ</td><td>いだ</td><td>いで</td>
+    </tr>
+    <tr>
+      <td>う/つ/る</td><td>つた</td><td>って</td>
+    </tr>
+    <tr>
+      <td>む/ぶ/ぬ</td><td>んだ</td><td>んで</td>
+    </tr>
+    <tr>
+      <td>す</td><td>した</td><td>して</td>
+    </tr>
+  </table>
+</div>
+<script>
+  const japaneseWords = [
+    "かう", "あう", "いう", "すう", "うたう", "つかう", "ならう", "はらう", "わらう", "あらう",
+    "ひろう", "もらう", "さそう", "てつだう", "たつ", "まつ", "もつ", "かつ", "そだつ", "うる",
+    "とる", "のる", "ふる", "ある", "かえる", "はしる", "すわる", "つくる", "まがる", "おくる",
+    "いる", "おこる", "とまる", "わかる", "ふとる", "しゃべる", "ことわる", "はいる", "おわる",
+    "きる", "すむ", "こむ", "やすむ", "たのむ", "よぶ", "あそぶ", "えらぶ", "はこぶ", "ころぶ",
+    "よろこぶ", "はく", "おく", "あるく", "みがく", "はたらく", "いく", "すく", "ぬぐ", "およぐ",
+    "いそぐ", "かす", "けす", "はなす", "かえす", "しぬ", "さがす", "なくす", "おもいだす", "おとす",
+    "なおす"
+  ];
+
+  const sinhalaWords = [
+    "මිලදීගන්නවා", "හමුවෙනවා", "කියනවා", "(දුම්) උරනවා", "ගායනා කරනවා", "භාවිතාකරනවා", "ඉගෙන ගන්නවා", "මුදල් ගෙවනවා", "සිනාසෙනවා", "සෝදනවා",
+    "අහුලනවා", "ලබනවා", "අරාධනා කරනවා", "උදව්කරනවා", "හිටගන්නවා", "බලා සිටිනවා", "දරා සිටිනවා", "දිනනවා", "හදා වඩාගන්නවා", "විකුණනවා",
+    "ගන්නවා", "නගිනවා", "වහිනවා", "තියෙනවා", "ආපසුවනවා", "දුවනවා", "වාඩි වෙනවා", "හදනවා", "හරවනවා.",
+    "යවනවා", "අවශ්‍ය වෙනවා", "තරහ යනවා", "නැවතෙනවා", "නේරෙනවා.", "මහත්වෙනවා", "කථා කරනවා", "ප්‍රතික්ෂේපකරනවා", "ඇතුළුවෙනවා", "අවසන් වෙනවා",
+    "කපනවා.", "ජීවත් වෙනවා", "පිරෙනවා", "නිවාඩු ගන්නවා", "ඉල්ලා සිටිනවා", "කැඳවනවා", "සෙල්ලම් කරනවා", "තෝරනවා",
+    "ඔසවන් යනවා", "පෙරළී වැටෙනවා", "උද්දාමයට පවෙනවා", "පළදිනවා", "තබනවා", "ඇවිදිනවා", "මදිනවා", "වැඩකරනවා", "යනවා", "හිස්වෙනවා",
+    "ඇඳුම් ගලවනවා", "පිහනවා", "ඉක්මන් කරනවා", "ණයට ගන්නවා", "මනවා.",
+    "කථා කරනවා", "ආපසුවනවා", "මැරෙනවා", "සොයනවා", "නැතිවෙනවා", "මතක්වෙනවා", "වට්ටනවා", "සුවකරනවා."
+  ];
+
+  let currentIndex = 0;
+  let intervalId;
+  let synth = window.speechSynthesis;
+
+  function displayWords() {
+    document.getElementById('japanese-word').innerText = japaneseWords[currentIndex];
+    document.getElementById('sinhala-word').innerText = sinhalaWords[currentIndex];
+    speak(japaneseWords[currentIndex], 'ja-JP');
+    speak(sinhalaWords[currentIndex], 'si-LK');
+  }
+
+  function speak(text, lang) {
+    let utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = lang;
+    synth.speak(utterance);
+  }
+
+  function play() {
+    intervalId = setInterval(() => {
+      displayWords();
+      currentIndex = (currentIndex + 1) % japaneseWords.length;
+    }, 2000);
+  }
+
+  function pause() {
+    clearInterval(intervalId);
+    synth.cancel();
+  }
+
+  function resume() {
+    play();
+  }
+
+  function next() {
+    currentIndex = (currentIndex + 1) % japaneseWords.length;
+    displayWords();
+  }
+
+  function previous() {
+    currentIndex = (currentIndex - 1 + japaneseWords.length) % japaneseWords.length;
+    displayWords();
+  }
+
+  // Display initial words
+  displayWords();
+</script>
+
+</body>
+
+</html>

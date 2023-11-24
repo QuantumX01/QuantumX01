@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="shortcut icon" type="image/x-icon" href="a.png" />
+    <title>Home</title>
+    <style>
+        body {
+            background-color: #140910;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            overflow: hidden;
+            position: relative; /* Added relative positioning to establish stacking context */
+        }
+
+        .container {
+            padding-top: 50px;
+            position: relative; /* Added relative positioning */
+            z-index: 2; /* Set a higher z-index for buttons to appear above bubbles */
+        }
+
+        .nav-link {
+            text-decoration: none;
+            padding: 10px;
+            background-color: #7B68EE;
+            border: 2px solid #F0F8FF;
+            color: #F0F8FF;
+            margin: 5px;
+            border-radius: 15px; /* Rounded edges */
+            position: relative; /* Added relative positioning */
+            z-index: 2; /* Set a higher z-index for buttons to appear above bubbles */
+        }
+
+        @media only screen and (max-width: 768px) {
+            .container {
+                padding-top: 20px;
+            }
+
+            .nav-link {
+                padding: 8px;
+                font-size: 14px;
+            }
+        }
+
+        .bubble {
+            position: absolute;
+            border-radius: 50%;
+            animation: moveBubble linear infinite, fadeInOut 2s infinite alternate;
+            z-index: 1; /* Set a lower z-index for bubbles to appear behind buttons */
+        }
+
+        @keyframes moveBubble {
+            0% {
+                transform: translateY(0) translateX(0);
+            }
+            50% {
+                transform: translateY(-50px) translateX(50px);
+            }
+            100% {
+                transform: translateY(0) translateX(0);
+            }
+        }
+
+        @keyframes fadeInOut {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.5;
+            }
+        }
+
+        #uta-image {
+            position: absolute;
+            top: 50px; /* Adjusted the top position to start from the top of the buttons */
+            left: 100px; /* Set your desired left position */
+            transition: top 1s, left 1s, width 1s, height 1s;
+            z-index: 3; /* Set a lower z-index for the image to appear behind buttons */
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <a class="nav-link" href="verbs.html">Verbs</a>
+        <a class="nav-link" href="allV.html">Quick Verbs</a>
+        <a class="nav-link" href="adjectives.html">Adjectives</a>
+        <a class="nav-link" href="talk.html">I am speaking</a>
+        <a class="nav-link" href="hiragana.html">Hiragana check</a>
+        <a class="nav-link" href="katakana.html">Katakana check</a>
+        <a class="nav-link" href="kanji.html">Kanji check</a>
+        <a class="nav-link" href="color.html">Color check</a>
+        <a class="nav-link" href="animals.html">Animals check</a>
+        <a class="nav-link" href="vegetables.html">Vegetables check</a>
+        <a class="nav-link" href="qAndA.html">Q & A</a>
+    </div>
+
+    <div id="bubbles-container">
+        <!-- Add the うた.png image -->
+        <img id="uta-image" src="img/うた.png" alt="うた image">
+    </div>
+
+    <script>
+        function createBubble() {
+            const bubble = document.createElement('div');
+            bubble.className = 'bubble';
+
+            const size = Math.floor(Math.random() * 30) + 10;
+            const color = getRandomColor();
+            const position = getRandomPosition();
+
+            bubble.style.backgroundColor = color;
+            bubble.style.width = size + 'px';
+            bubble.style.height = size + 'px';
+            bubble.style.top = position.top + 'px';
+            bubble.style.left = position.left + 'px';
+
+            document.getElementById('bubbles-container').appendChild(bubble);
+        }
+
+        function getRandomPosition() {
+            const screenWidth = window.innerWidth;
+            const screenHeight = window.innerHeight;
+            const randomTop = Math.floor(Math.random() * screenHeight);
+            const randomLeft = Math.floor(Math.random() * screenWidth);
+            return { top: randomTop, left: randomLeft };
+        }
+
+        function getRandomColor() {
+            const letters = '0123456789ABCDEF';
+            let color = '#';
+            for (let i = 0; i < 6; i++) {
+                color += letters[Math.floor(Math.random() * 16)];
+            }
+            return color;
+        }
+
+        // Create bubbles with different colors, sizes, and positions
+        for (let i = 0; i < 20; i++) {
+            createBubble();
+        }
+
+        // Move bubbles smoothly using CSS animation and change positions randomly
+        setInterval(() => {
+            const bubbles = document.querySelectorAll('.bubble');
+            bubbles.forEach((bubble) => {
+                const position = getRandomPosition();
+                bubble.style.top = position.top + 'px';
+                bubble.style.left = position.left + 'px';
+            });
+
+            const utaImage = document.getElementById('uta-image');
+            const utaPosition = getRandomPosition();
+            const utaSize = Math.floor(Math.random() * 50) + 20;
+
+            utaImage.style.top = utaPosition.top + 'px';
+            utaImage.style.left = utaPosition.left + 'px';
+            utaImage.style.width = utaSize + 'px';
+            utaImage.style.height = utaSize + 'px';
+        }, 2000); // Change positions every 2 seconds
+    </script>
+
+</body>
+</html>
